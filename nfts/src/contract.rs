@@ -15,9 +15,9 @@ pub struct Nft {
     pub transactions: HashMap<H256, NFTEvent>,
     //pub proofsofwaste: HashMap<H256, NFTEvent>,
     //pub proofsofwaste: HashMap::new(),
-    pub proofsofwaste: HashMap<u64,IoProofofWaste>,
+    //pub proofsofwaste: HashMap<u64,IoProofofWaste>,
     //pub proof: Vec<u32>;
-    //pub proofsofwaste: HashMap<String>
+    pub proofsofwaste: HashMap<ActorId,String>
 }
 
 static mut CONTRACT: Option<Nft> = None;
@@ -48,32 +48,33 @@ unsafe extern "C" fn handle() {
     let action: NFTAction = msg::load().expect("Could not load NFTAction");
     let nft = CONTRACT.get_or_insert(Default::default());
     match action {
-        NFTAction::Addproof {      
-            namepet_,
-            ipfshash_,
-        } => {
-
+        /*
+        NFTAction::Addproof {ipfshash_} => {
             let whox = msg::source();
-            let when = exec::block_timestamp();
-            let namepetx= namepet_;
+            //let when = exec::block_timestamp();
+            //let namepetx= namepet_;
             let ipfshashx = ipfshash_;
-
+            
+            /*
             let newIoproofwaste = IoProofofWaste {
                 who: whox,
                 namepet: namepetx,
                 ipfhash: ipfshashx,
-            };
+            };*/
+
+            //NFTAction::Clear { transaction_hash } => nft.clear(transaction_hash),
 
             //------------------------------------------------------
-            let config: InitNFT = msg::load().expect("Unable to decode InitNFT");
-            let oldproof_hashmap = config.proofsofwaste;
+            //let config: InitNFT = msg::load().expect("Unable to decode InitNFT");
+            //let oldproof_hashmap = config.proofsofwaste;
             //let newproof_hashmap = oldproof_hashmap.insert(who, when, namepet, ipfshash);
-            let newproof_hashmap = oldproof_hashmap.insert(when,newIoproofwaste);
+            //let newproof_hashmap = oldproof_hashmap.insert(when,newIoproofwaste);
+            //let newproof_hashmap = oldproof_hashmap.insert(when,newIoproofwaste);
             
-            CONTRACT = Some(nft);
-            msg::reply(namepet_, 0).expect("Unable to share the state");
+            //CONTRACT = Some(nft);
+            msg::reply(ipfshashx, 0).expect("Unable to share the state");
 
-        }
+        }*/
         NFTAction::Mint {
             transaction_id,
             token_metadata,

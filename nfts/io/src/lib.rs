@@ -8,7 +8,7 @@ use gear_lib::non_fungible_token::{
 };
 use gmeta::{In, InOut, Metadata};
 use gstd::{prelude::*, ActorId};
-use hashbrown::HashMap;
+//use hashbrown::HashMap;
 
 pub use gear_lib::non_fungible_token::delegated::DelegatedApproveMessage;
 use primitive_types::H256;
@@ -72,10 +72,11 @@ pub enum NFTAction {
     Clear {
         transaction_hash: H256,
     },
+    /*
     Addproof{
-        namepet: String,
+        //namepet: String,
         ipfshash: String,
-    },
+    },*/
 }
 
 
@@ -108,12 +109,21 @@ pub enum NFTEvent {
     },
 }
 
+/*
 #[derive(Debug, Clone, Default, Encode, Decode, TypeInfo)]
 #[codec(crate = gstd::codec)]
 #[scale_info(crate = gstd::scale_info)]
 pub struct IoProofofWaste {
     pub who: ActorId,
     pub namepet: String,
+    pub ipfshash: String,
+}*/
+
+#[derive(Debug, Clone, Default, Encode, Decode, TypeInfo)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
+pub struct IoProofofWaste {
+    pub who: ActorId,
     pub ipfshash: String,
 }
 
@@ -130,7 +140,8 @@ pub struct IoNFTState {
     pub token_metadata_by_id: Vec<(TokenId, Option<TokenMetadata>)>,
     pub tokens_for_owner: Vec<(ActorId, Vec<TokenId>)>,
     pub royalties: Option<Royalties>,
-    pub proofsofwaste: Vec<(u64,IoProofofWaste)>,
+    //pub proofsofwaste: Vec<(u64,IoProofofWaste)>,
+    //pub proofsofwaste: Vec<(ActorId,String)>,
 }
 
 #[derive(Debug, Clone, Default, Encode, Decode, TypeInfo)]
@@ -156,7 +167,7 @@ impl From<&NFTState> for IoNFTState {
             token_metadata_by_id,
             tokens_for_owner,
             royalties,
-            proofsofwaste,
+            //proofsofwaste,
         } = value;
 
         let owner_by_id = owner_by_id
@@ -188,7 +199,7 @@ impl From<&NFTState> for IoNFTState {
             token_metadata_by_id,
             tokens_for_owner,
             royalties: royalties.clone(),
-            proofsofwaste,
+            //proofsofwaste,
         }
     }
 }
