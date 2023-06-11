@@ -73,7 +73,7 @@ pub enum NFTAction {
         transaction_hash: H256,
     },
     Addproof{
-        //namepet: String,
+        namepet: String,
         ipfshash: String,
     },
 }
@@ -156,6 +156,7 @@ impl From<&NFTState> for IoNFTState {
             token_metadata_by_id,
             tokens_for_owner,
             royalties,
+            proofsofwaste,
         } = value;
 
         let owner_by_id = owner_by_id

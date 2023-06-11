@@ -16,6 +16,7 @@ pub struct Nft {
     //pub proofsofwaste: HashMap<H256, NFTEvent>,
     //pub proofsofwaste: HashMap::new(),
     pub proofsofwaste: HashMap<u64,IoProofofWaste>,
+    //pub proof: Vec<u32>;
     //pub proofsofwaste: HashMap<String>
 }
 
@@ -68,21 +69,6 @@ unsafe extern "C" fn handle() {
             let oldproof_hashmap = config.proofsofwaste;
             //let newproof_hashmap = oldproof_hashmap.insert(who, when, namepet, ipfshash);
             let newproof_hashmap = oldproof_hashmap.insert(when,newIoproofwaste);
-            if config.royalties.is_some() {
-                config.royalties.as_ref().expect("Unable to g").validate();
-            }
-            let nft = Nft {
-                token: NFTState {
-                    name: config.name,
-                    symbol: config.symbol,
-                    base_uri: config.base_uri,
-                    royalties: config.royalties,
-                    proofsofwaste: newproof_hashmap,
-                    ..Default::default()
-                },
-                owner: msg::source(),
-                ..Default::default()
-            };
             
             CONTRACT = Some(nft);
             msg::reply(namepet_, 0).expect("Unable to share the state");
