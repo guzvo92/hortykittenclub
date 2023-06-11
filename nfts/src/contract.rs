@@ -63,15 +63,15 @@ unsafe extern "C" fn handle() {
             //let oldproof_hashmap = config.proofsofwaste;
             //let newproof_hashmap = oldproof_hashmap.insert(who, when, namepet, ipfshash);
             //let newproof_hashmap = oldproof_hashmap.insert(when, newIoproofwaste);
-            if action.royalties.is_some() {
-                action.royalties.as_ref().expect("Unable to g").validate();
+            if config.royalties.is_some() {
+                config.royalties.as_ref().expect("Unable to g").validate();
             }
             let nft = Nft {
                 token: NFTState {
-                    name: action.name,
-                    symbol: action.symbol,
-                    base_uri: action.base_uri,
-                    royalties: action.royalties,
+                    name: config.name,
+                    symbol: config.symbol,
+                    base_uri: config.base_uri,
+                    royalties: config.royalties,
                     ..Default::default()
                 },
                 owner: msg::source(),
@@ -81,12 +81,8 @@ unsafe extern "C" fn handle() {
 
             CONTRACT = Some(nft);
         }
-        NFTAction::Mint {
-            transaction_id,
-            token_metadata,
-        } => {
-            msg::reply(
-                nft.process_transaction(transaction_id, |nft| {
+        NFTAction::Mint {transaction_id,token_metadata,} => {
+            msg::reply(nft.process_transaction(transaction_id, |nft| {
                     NFTEvent::Transfer(MyNFTCore::mint(nft, token_metadata))
                 }),
                 0,

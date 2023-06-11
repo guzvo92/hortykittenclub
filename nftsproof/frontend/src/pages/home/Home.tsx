@@ -15,6 +15,8 @@ function Home() {
   const { ownerNFTs, isOwnerNFTsRead } = useOwnerNFTs();
   const { approvedNFTs, isApprovedNFTsRead } = useApprovedNFTs();
 
+  {/* lista de nfts en la blockchain */}
+  
   const getList = () => {
     switch (filter) {
       case 'My':
@@ -36,11 +38,12 @@ function Home() {
   const NFTs = getNFTs();
   const isEachNftLoaded = nfts && (account ? isOwnerNFTsRead && isApprovedNFTsRead : true);
   const isAnyNft = !!NFTs?.length;
+    
 
   return (
     <>
       <header className={styles.header}>
-        <h2 className={styles.heading}>Nfts Proofs of Feed</h2>
+        <h2 className={styles.heading}>NFTs</h2>
         {account && <Filter list={FILTERS} value={filter} onChange={setFilter} />}
       </header>
       {isEachNftLoaded ? (
