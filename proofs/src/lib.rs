@@ -3,7 +3,8 @@ use gstd::{prelude::*,msg,ActorId};
 use hello_world_io::{IoProofofWaste};
 
 
-static mut PROOF: Option<IoProofofWaste> = None;
+static mut PROOF: Option<HashMap<ActorId,String>> = None;
+//static mut PROOF: Option<IoProofofWaste> = None;
 //------------------------------------------------------------
 
 #[no_mangle]
@@ -15,8 +16,14 @@ extern "C" fn init(){
 //firma
 #[no_mangle]
 extern "C" fn handle(){
-    let message: IoProofofWaste = msg::load().expect("Can't decode `InputMessage`");
+    let message: String = msg::load().expect("Can't decode `InputMessage`");
+    let tmg = IoProofofWaste {
+        who: msg::source(),
+        ipfshash: message,
+    };
+
     let actual_proofs = unsafe { PROOF.as_ref().expect("The contract is not initialized")};
+    unsafe { PROOF = Some(message)};
 
 }
 
