@@ -3,7 +3,7 @@ use gear_lib_derive::{NFTCore, NFTMetaState, NFTStateKeeper};
 use gmeta::Metadata;
 use gstd::{errors::Result as GstdResult, exec, msg, prelude::*, ActorId, MessageId};
 use hashbrown::HashMap;
-use nft_io::{InitNFT, IoNFT, NFTAction, NFTEvent, NFTMetadata};
+use nft_io::{InitNFT, IoNFT, NFTAction, NFTEvent, NFTMetadata,IoProofofWaste};
 use primitive_types::{H256, U256};
 
 #[derive(Debug, Default, NFTStateKeeper, NFTCore, NFTMetaState)]
@@ -13,6 +13,10 @@ pub struct Nft {
     pub token_id: TokenId,
     pub owner: ActorId,
     pub transactions: HashMap<H256, NFTEvent>,
+    //pub proofsofwaste: HashMap<H256, NFTEvent>,
+    //pub proofsofwaste: HashMap::new(),
+    pub proofsofwaste: HashMap<u64,IoProofofWaste>
+    //pub proofsofwaste: HashMap<String>
 }
 
 static mut CONTRACT: Option<Nft> = None;
@@ -37,11 +41,53 @@ unsafe extern "C" fn init() {
     CONTRACT = Some(nft);
 }
 
+
 #[no_mangle]
 unsafe extern "C" fn handle() {
     let action: NFTAction = msg::load().expect("Could not load NFTAction");
     let nft = CONTRACT.get_or_insert(Default::default());
     match action {
+        NFTAction::Addproof {      
+            namepet_,
+            ipfshash_,
+        } => {
+
+            let whox = msg::source();
+            let when = exec::block_timestamp();
+            let namepetx= namepet_;
+            let ipfshashx = ipfshash_;
+
+            let newIoproofwaste = IoProofofWaste {
+                who: whox,
+                namepet: namepetx,
+                ipfhash: ipfshashx,
+            };
+
+            //------------------------------------------------------
+            let config: InitNFT = msg::load().expect("Unable to decode InitNFT");
+            let oldproof_hashmap = config.proofsofwaste;
+            //let newproof_hashmap = oldproof_hashmap.insert(who, when, namepet, ipfshash);
+            let newproof_hashmap = oldproof_hashmap.insert(when,newIoproofwaste);
+            if config.royalties.is_some() {
+                config.royalties.as_ref().expect("Unable to g").validate();
+            }
+            let nft = Nft {
+                token: NFTState {
+                    name: config.name,
+                    symbol: config.symbol,
+                    base_uri: config.base_uri,
+                    royalties: config.royalties,
+                    proofsofwaste: newproof_hashmap,
+                    ..Default::default()
+                },
+                owner: msg::source(),
+                ..Default::default()
+            };
+            
+            CONTRACT = Some(nft);
+            msg::reply(namepet_, 0).expect("Unable to share the state");
+
+        }
         NFTAction::Mint {
             transaction_id,
             token_metadata,
@@ -230,6 +276,7 @@ impl From<&Nft> for IoNFT {
             token_id,
             owner,
             transactions,
+            proofsofwaste,
         } = value;
 
         let transactions = transactions

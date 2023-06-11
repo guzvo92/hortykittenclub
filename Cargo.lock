@@ -2278,7 +2278,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "nft"
+name = "nft-horty"
 version = "0.2.11"
 dependencies = [
  "gclient",
