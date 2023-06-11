@@ -16,3 +16,5 @@ gear-wasm-builder = { workspace = true, features = ["metawasm"] }
 
 [features]
 binary-vendor = []
+
+

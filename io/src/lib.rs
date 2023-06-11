@@ -111,6 +111,16 @@ pub enum NFTEvent {
 #[derive(Debug, Clone, Default, Encode, Decode, TypeInfo)]
 #[codec(crate = gstd::codec)]
 #[scale_info(crate = gstd::scale_info)]
+pub struct IoProofofWaste {
+    pub who: ActorId,
+    pub namepet: String,
+    pub ipfshash: String,
+}
+
+
+#[derive(Debug, Clone, Default, Encode, Decode, TypeInfo)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
 pub struct IoNFTState {
     pub name: String,
     pub symbol: String,
@@ -120,7 +130,7 @@ pub struct IoNFTState {
     pub token_metadata_by_id: Vec<(TokenId, Option<TokenMetadata>)>,
     pub tokens_for_owner: Vec<(ActorId, Vec<TokenId>)>,
     pub royalties: Option<Royalties>,
-    pub proofsofwaste: HashMap<H256, NFTEvent>,
+    pub proofsofwaste: Vec<(u64,IoProofofWaste)>,
 }
 
 #[derive(Debug, Clone, Default, Encode, Decode, TypeInfo)]
@@ -133,14 +143,6 @@ pub struct IoNFT {
     pub transactions: Vec<(H256, NFTEvent)>,
 }
 
-#[derive(Debug, Clone, Default, Encode, Decode, TypeInfo)]
-#[codec(crate = gstd::codec)]
-#[scale_info(crate = gstd::scale_info)]
-pub struct IoProofofWaste {
-    pub who: ActorId,
-    pub namepet: String,
-    pub ipfshash: String,
-}
 
 
 impl From<&NFTState> for IoNFTState {
@@ -154,7 +156,6 @@ impl From<&NFTState> for IoNFTState {
             token_metadata_by_id,
             tokens_for_owner,
             royalties,
-            proofsofwaste,
         } = value;
 
         let owner_by_id = owner_by_id
@@ -186,6 +187,7 @@ impl From<&NFTState> for IoNFTState {
             token_metadata_by_id,
             tokens_for_owner,
             royalties: royalties.clone(),
+            proofsofwaste,
         }
     }
 }

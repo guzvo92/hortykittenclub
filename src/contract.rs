@@ -15,7 +15,7 @@ pub struct Nft {
     pub transactions: HashMap<H256, NFTEvent>,
     //pub proofsofwaste: HashMap<H256, NFTEvent>,
     //pub proofsofwaste: HashMap::new(),
-    pub proofsofwaste: HashMap<u64,IoProofofWaste>
+    pub proofsofwaste: HashMap<u64,IoProofofWaste>,
     //pub proofsofwaste: HashMap<String>
 }
 

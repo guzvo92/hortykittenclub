@@ -2305,6 +2305,7 @@ dependencies = [
  "gear-lib",
  "gmeta",
  "gstd",
+ "hashbrown 0.13.2",
  "primitive-types",
 ]
 
