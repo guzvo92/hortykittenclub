@@ -7,20 +7,20 @@ target
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
+frontend3/node_modules
+frontend3/.pnp
+frontend3/.pnp.js
 
 # testing
-/coverage
+frontend3/coverage
 
 # production
-/build
+frontend3/build
 
 # misc
-.DS_Store
-.env
+/frontend3.DS_Store
+/frontend3.env
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+frontend3/npm-debug.log*
+frontend3/yarn-debug.log*
+frontend3/yarn-error.log*
