@@ -1,0 +1,27 @@
+
+
+[Deployfinal]-------------------------------------------------------------------
+ipfs 100 gatos hkc 1.png
+[IMAGENES]
+ipfs://QmNwKZPSwBFjvPgPSaUSZ3zAGrnZqS3krDbdTAj5qgDrBt
+https://ipfs-2.thirdwebcdn.com/ipfs/QmNwKZPSwBFjvPgPSaUSZ3zAGrnZqS3krDbdTAj5qgDrBt
+https://ipfs-2.thirdwebcdn.com/ipfs/QmNwKZPSwBFjvPgPSaUSZ3zAGrnZqS3krDbdTAj5qgDrBt
+
+[JSONS]
+ipfs://QmdDTWghBUi7VuzRBQD2Vsk9BVxnXpAw6d6VN1d8PhkZxN
+https://ipfs-2.thirdwebcdn.com/ipfs/QmdDTWghBUi7VuzRBQD2Vsk9BVxnXpAw6d6VN1d8PhkZxN/5.json
+
+
+
+https://hackmd.io/@0Lgb_JIZT3aadTpO3ZlmRQ/SJC-rFVJn
+
+npm install --global yarn 
+yarn install
+yarn start
+
+
+
+
+
+
+
