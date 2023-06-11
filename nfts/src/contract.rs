@@ -59,19 +59,19 @@ unsafe extern "C" fn handle() {
             };
 
             //------------------------------------------------------
-            let config: InitNFT = msg::load().expect("Unable to decode InitNFT");
+            //let config: InitNFT = msg::load().expect("Unable to decode InitNFT");
             //let oldproof_hashmap = config.proofsofwaste;
             //let newproof_hashmap = oldproof_hashmap.insert(who, when, namepet, ipfshash);
             //let newproof_hashmap = oldproof_hashmap.insert(when, newIoproofwaste);
-            if config.royalties.is_some() {
-                config.royalties.as_ref().expect("Unable to g").validate();
+            if action.royalties.is_some() {
+                action.royalties.as_ref().expect("Unable to g").validate();
             }
             let nft = Nft {
                 token: NFTState {
-                    name: config.name,
-                    symbol: config.symbol,
-                    base_uri: config.base_uri,
-                    royalties: config.royalties,
+                    name: action.name,
+                    symbol: action.symbol,
+                    base_uri: action.base_uri,
+                    royalties: action.royalties,
                     ..Default::default()
                 },
                 owner: msg::source(),
