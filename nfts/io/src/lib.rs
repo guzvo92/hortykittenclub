@@ -3,12 +3,12 @@
 use gear_lib::non_fungible_token::{
     io::{NFTApproval, NFTTransfer, NFTTransferPayout},
     royalties::*,
+    state::IoProofofWaste,
     state::NFTState,
     token::*,
 };
 use gmeta::{In, InOut, Metadata};
 use gstd::{prelude::*, ActorId};
-//use hashbrown::HashMap;
 
 pub use gear_lib::non_fungible_token::delegated::DelegatedApproveMessage;
 use primitive_types::H256;
@@ -72,13 +72,11 @@ pub enum NFTAction {
     Clear {
         transaction_hash: H256,
     },
-    /*
-    Addproof{
-        //namepet: String,
+    Addproof {
+        namepet: String,
         ipfshash: String,
-    },*/
+    },
 }
-
 
 #[derive(Debug, Encode, Decode, TypeInfo)]
 #[codec(crate = gstd::codec)]
@@ -109,25 +107,6 @@ pub enum NFTEvent {
     },
 }
 
-/*
-#[derive(Debug, Clone, Default, Encode, Decode, TypeInfo)]
-#[codec(crate = gstd::codec)]
-#[scale_info(crate = gstd::scale_info)]
-pub struct IoProofofWaste {
-    pub who: ActorId,
-    pub namepet: String,
-    pub ipfshash: String,
-}*/
-
-#[derive(Debug, Clone, Default, Encode, Decode, TypeInfo)]
-#[codec(crate = gstd::codec)]
-#[scale_info(crate = gstd::scale_info)]
-pub struct IoProofofWaste {
-    pub who: ActorId,
-    pub ipfshash: String,
-}
-
-
 #[derive(Debug, Clone, Default, Encode, Decode, TypeInfo)]
 #[codec(crate = gstd::codec)]
 #[scale_info(crate = gstd::scale_info)]
@@ -140,8 +119,7 @@ pub struct IoNFTState {
     pub token_metadata_by_id: Vec<(TokenId, Option<TokenMetadata>)>,
     pub tokens_for_owner: Vec<(ActorId, Vec<TokenId>)>,
     pub royalties: Option<Royalties>,
-    //pub proofsofwaste: Vec<(u64,IoProofofWaste)>,
-    //pub proofsofwaste: Vec<(ActorId,String)>,
+    pub proofsofwaste: Vec<(u64, Option<IoProofofWaste>)>,
 }
 
 #[derive(Debug, Clone, Default, Encode, Decode, TypeInfo)]
@@ -154,8 +132,6 @@ pub struct IoNFT {
     pub transactions: Vec<(H256, NFTEvent)>,
 }
 
-
-
 impl From<&NFTState> for IoNFTState {
     fn from(value: &NFTState) -> Self {
         let NFTState {
@@ -167,7 +143,7 @@ impl From<&NFTState> for IoNFTState {
             token_metadata_by_id,
             tokens_for_owner,
             royalties,
-            //proofsofwaste,
+            proofsofwaste,
         } = value;
 
         let owner_by_id = owner_by_id
@@ -190,6 +166,11 @@ impl From<&NFTState> for IoNFTState {
             .map(|(id, tokens)| (*id, tokens.clone()))
             .collect();
 
+        let proofsofwaste = proofsofwaste
+            .iter()
+            .map(|(id, tokens)| (*id, tokens.clone()))
+            .collect();
+
         Self {
             name: name.clone(),
             symbol: symbol.clone(),
@@ -199,7 +180,7 @@ impl From<&NFTState> for IoNFTState {
             token_metadata_by_id,
             tokens_for_owner,
             royalties: royalties.clone(),
-            //proofsofwaste,
+            proofsofwaste,
         }
     }
 }

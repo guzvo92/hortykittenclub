@@ -1,9 +1,12 @@
-use gear_lib::non_fungible_token::{io::NFTTransfer, nft_core::*, state::*, token::*};
+use gear_lib::non_fungible_token::{
+    io::NFTTransfer, nft_core::*, state::IoProofofWaste, state::*, token::*,
+};
+
 use gear_lib_derive::{NFTCore, NFTMetaState, NFTStateKeeper};
 use gmeta::Metadata;
 use gstd::{errors::Result as GstdResult, exec, msg, prelude::*, ActorId, MessageId};
 use hashbrown::HashMap;
-use nft_io::{InitNFT, IoNFT, NFTAction, NFTEvent, NFTMetadata,IoProofofWaste};
+use nft_io::{InitNFT, IoNFT, NFTAction, NFTEvent, NFTMetadata};
 use primitive_types::{H256, U256};
 
 #[derive(Debug, Default, NFTStateKeeper, NFTCore, NFTMetaState)]
@@ -13,11 +16,7 @@ pub struct Nft {
     pub token_id: TokenId,
     pub owner: ActorId,
     pub transactions: HashMap<H256, NFTEvent>,
-    //pub proofsofwaste: HashMap<H256, NFTEvent>,
-    //pub proofsofwaste: HashMap::new(),
-    //pub proofsofwaste: HashMap<u64,IoProofofWaste>,
-    //pub proof: Vec<u32>;
-    pub proofsofwaste: HashMap<ActorId,String>
+    pub proofsofwaste: Vec<(u64, IoProofofWaste)>,
 }
 
 static mut CONTRACT: Option<Nft> = None;
@@ -42,39 +41,46 @@ unsafe extern "C" fn init() {
     CONTRACT = Some(nft);
 }
 
-
 #[no_mangle]
 unsafe extern "C" fn handle() {
     let action: NFTAction = msg::load().expect("Could not load NFTAction");
     let nft = CONTRACT.get_or_insert(Default::default());
     match action {
-        /*
-        NFTAction::Addproof {ipfshash_} => {
+        NFTAction::Addproof { namepet, ipfshash } => {
             let whox = msg::source();
-            //let when = exec::block_timestamp();
-            //let namepetx= namepet_;
-            let ipfshashx = ipfshash_;
-            
-            /*
+            let when = exec::block_timestamp();
+            let namepetx = namepet;
+            let ipfshashx = ipfshash;
+
             let newIoproofwaste = IoProofofWaste {
                 who: whox,
                 namepet: namepetx,
-                ipfhash: ipfshashx,
-            };*/
-
-            //NFTAction::Clear { transaction_hash } => nft.clear(transaction_hash),
+                ipfshash: ipfshashx,
+            };
 
             //------------------------------------------------------
-            //let config: InitNFT = msg::load().expect("Unable to decode InitNFT");
+            let config: InitNFT = msg::load().expect("Unable to decode InitNFT");
             //let oldproof_hashmap = config.proofsofwaste;
             //let newproof_hashmap = oldproof_hashmap.insert(who, when, namepet, ipfshash);
-            //let newproof_hashmap = oldproof_hashmap.insert(when,newIoproofwaste);
-            //let newproof_hashmap = oldproof_hashmap.insert(when,newIoproofwaste);
-            
-            //CONTRACT = Some(nft);
-            msg::reply(ipfshashx, 0).expect("Unable to share the state");
+            //let newproof_hashmap = oldproof_hashmap.insert(when, newIoproofwaste);
+            if config.royalties.is_some() {
+                config.royalties.as_ref().expect("Unable to g").validate();
+            }
+            let nft = Nft {
+                token: NFTState {
+                    name: config.name,
+                    symbol: config.symbol,
+                    base_uri: config.base_uri,
+                    royalties: config.royalties,
+                    ..Default::default()
+                },
+                owner: msg::source(),
+                ..Default::default()
+            };
+            msg::reply("Name of pet", 0).expect("Unable to share the state");
 
-        }*/
+            CONTRACT = Some(nft);
+        }
         NFTAction::Mint {
             transaction_id,
             token_metadata,
